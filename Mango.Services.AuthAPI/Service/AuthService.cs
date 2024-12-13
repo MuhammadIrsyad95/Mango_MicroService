@@ -12,7 +12,7 @@ namespace Mango.Services.AuthAPI.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-
+        //
         public AuthService(AppDbContext db, IJwtTokenGenerator jwtTokenGenerator,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
