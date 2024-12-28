@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Mango.Web</title>
+    <title>@ViewData["Title"]Mango.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css"/>
@@ -36,6 +36,26 @@
                                 <li><hr class="dropdown-divider"></li>
                             </ul>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-controller="Auth" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-controller="Auth" asp-action="Register">Register</a>
+                            </li>
+                        }else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " href="#">Hello, @User.Identity.Name</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link " asp-controller="Auth" asp-action="Logout">Logout</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
