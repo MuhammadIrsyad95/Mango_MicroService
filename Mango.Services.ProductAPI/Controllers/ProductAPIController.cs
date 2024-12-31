@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Mango.Services.ProductAPI.Data;
 using Mango.Services.ProductAPI.Models;
-using Mango.Services.ProductAPI.Models.Dtos;
+using Mango.Services.ProductAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
