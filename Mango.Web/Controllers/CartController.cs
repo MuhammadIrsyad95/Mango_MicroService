@@ -1,5 +1,6 @@
 ﻿using Mango.Web.Models;
 using Mango.Web.Service.IService;
+using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -29,6 +30,8 @@ namespace Mango.Web.Controllers
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
 
+       
+
         [HttpPost]
         [ActionName("Checkout")]
         public async Task<IActionResult> Checkout(CartDto cartDto)
@@ -37,17 +40,32 @@ namespace Mango.Web.Controllers
             cart.CartHeader.Phone =  cartDto.CartHeader.Phone;
             cart.CartHeader.Email =  cartDto.CartHeader.Email;
             cart.CartHeader.Name =  cartDto.CartHeader.Name;
-            
+
+
             var response = await _orderService.CreateOrder(cart);
             OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
 
             if (response !=null && response.IsSuccess)
             {
                 //
+                TempData["SuccessMessage"] = "Order has been placed successfully.";
+                return RedirectToAction("Checkout", new { id = orderHeaderDto.OrderHeaderId });
             }
             return View();
         }
-
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            ResponseDto response = await _cartService.RemoveFromCartAsync(orderId);
+            if (response != null && response.IsSuccess)
+            {
+                OrderHeaderDto orderHeader = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+                if (orderHeader.Status == SD.Status_Approved)
+                {
+                    return View();
+                }
+            }
+            return View(orderId);
+        }
         public async  Task<IActionResult> Remove(int cartDetailsId)
         {
             var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
